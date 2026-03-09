@@ -29,12 +29,24 @@ The code hardcodes the Milvus host as `standalone`. To run the server/client loc
 6. Frontend: `cd im_server/frontend && npm start`
 7. Client: `cd im_client && PYTHONPATH=/workspace OPENAI_BASE_URL="https://openrouter.ai/api/v1" .venv/bin/python main.py` (requires `CUSTOM_CONFIG` env var for agent config)
 
+### Running the IoA Client (for benchmarks)
+
+The client spawns a ReAct agent Docker container (`react-agent` image). For local dev:
+1. Pull image: `sudo docker pull weize/react-agent:latest && sudo docker tag weize/react-agent:latest react-agent:latest`
+2. Fix Docker socket: `sudo chmod 666 /var/run/docker.sock`
+3. Add hostnames to `/etc/hosts`: map `ioa-server` to `127.0.0.1`, and map `react_rag` (or whatever `container_name` is in config) to the container's IP on `agent_network`
+4. Start client: `cd im_client && PYTHONPATH=/workspace OPENAI_BASE_URL="https://openrouter.ai/api/v1" python main.py`
+5. Send goals: `curl -X POST http://127.0.0.1:5050/launch_goal -H "Content-Type: application/json" -d '{"goal": "...", "max_turns": 5}'`
+
 ### Gotchas
 
 - `pymilvus==2.3.0` (pinned in requirements) does not build on Python 3.12 due to grpcio build issues. Install latest `pymilvus` instead — it is API-compatible.
 - The `OPENAI_API_KEY` provided in this environment is an OpenRouter key. Set `OPENAI_BASE_URL=https://openrouter.ai/api/v1` when starting the server/client so the OpenAI SDK routes to OpenRouter.
 - The server config path `configs/agent_registry.yaml` is relative to CWD. In Docker, configs are mounted at `/app/configs`. For local dev, symlink `configs/server_configs` into `im_server/configs`.
 - The `common/` package is shared between server and client. Set `PYTHONPATH=/workspace` when running either locally.
+- `websockets` v16 removed the `.open` attribute on connections. The `websocket_client.py` has been patched with a state-based check.
+- The default `tools_config: tools_rag.yaml` does not exist in the repo; changed to `tools.yaml`.
+- Free models (e.g. `stepfun/step-3.5-flash:free`) are very slow for multi-turn agent benchmarks. Simple tasks (~1 turn) complete in ~50s; complex tasks (10+ turns) can take 10+ minutes each.
 
 ### Lint / format
 
