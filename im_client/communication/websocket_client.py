@@ -2,21 +2,32 @@ from pydantic import ValidationError
 import websockets
 import asyncio
 
-# import logging
 from common.log import logger
 from common.types import AgentMessage
-from websockets.client import WebSocketClientProtocol
 from websockets.exceptions import ConnectionClosed
+
+
+def _ws_is_open(ws) -> bool:
+    if ws is None:
+        return False
+    try:
+        return ws.state.name == "OPEN"
+    except AttributeError:
+        pass
+    try:
+        return ws.open
+    except AttributeError:
+        return ws is not None
 
 
 class WebSocketClient:
     def __init__(self, uri):
-        self.uri = uri  # "ws://localhost:8000/ws"
-        self.websocket: WebSocketClientProtocol = None
+        self.uri = uri
+        self.websocket = None
 
     async def connect(self):
         try:
-            self.websocket: WebSocketClientProtocol = await websockets.connect(self.uri, ping_timeout=None)
+            self.websocket = await websockets.connect(self.uri, ping_timeout=None)
         except Exception as e:
             print(f"Websocket connection error: {e}")
 
@@ -25,7 +36,7 @@ class WebSocketClient:
         retries = 0
 
         while retries < max_retries:
-            if self.websocket and self.websocket.open:
+            if _ws_is_open(self.websocket):
                 try:
                     await self.websocket.send(message)
                     break
@@ -49,7 +60,7 @@ class WebSocketClient:
         retries = 0
 
         while retries < max_retries:
-            if self.websocket and self.websocket.open:
+            if _ws_is_open(self.websocket):
                 try:
                     message = await self.websocket.recv()
                     message = AgentMessage.model_validate_json(message)

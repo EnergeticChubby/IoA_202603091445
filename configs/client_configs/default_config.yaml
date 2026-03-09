@@ -6,7 +6,7 @@ tool_agent:
   agent_type: ReAct
   agent_name: ReAct Agent
   desc: The ReAct agent is designed as an affordable and straightforward agent, It is well-suited for handling routine tasks. However, it is important to note that it may not be able to tackle highly complex problems. It has an access to a story about Paul Graham.
-  tools_config: tools_rag.yaml
+  tools_config: tools.yaml
   model: stepfun/step-3.5-flash:free
   image_name: react-agent
   container_name: react_rag
