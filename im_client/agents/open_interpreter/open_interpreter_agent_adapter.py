@@ -43,7 +43,7 @@ class OpenInterpreterAgent(AgentAdapter):
         if not os.path.exists(self.log_path):
             os.makedirs(self.log_path)
 
-    async def run(self, task_desc: str, model: str = "gpt-4-1106-preview"):
+    async def run(self, task_desc: str, model: str = "stepfun/step-3.5-flash:free"):
         data = TaskDesc(task_desc=task_desc, model=model)
         headers = {"Content-Type": "application/json"}
         print(f"the model specified in Open Interpreter: {data.model}...")

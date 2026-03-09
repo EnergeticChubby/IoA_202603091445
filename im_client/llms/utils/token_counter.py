@@ -6,7 +6,7 @@ from common.log import logger
 from llms import LOCAL_LLMS, LOCAL_LLMS_MAPPING
 
 
-def count_string_tokens(prompt: str = "", model: str = "gpt-3.5-turbo") -> int:
+def count_string_tokens(prompt: str = "", model: str = "stepfun/step-3.5-flash:free") -> int:
     if model.startswith("gpt-3.5-turbo") or model.startswith("gpt-4"):
         return len(tiktoken.encoding_for_model(model).encode(prompt))
     elif model.lower() in LOCAL_LLMS or model in LOCAL_LLMS:
@@ -14,9 +14,11 @@ def count_string_tokens(prompt: str = "", model: str = "gpt-3.5-turbo") -> int:
 
         encoding = AutoTokenizer.from_pretrained(LOCAL_LLMS_MAPPING[model.lower()])
         return len(encoding.encode(prompt))
+    else:
+        return len(tiktoken.get_encoding("cl100k_base").encode(prompt))
 
 
-def count_message_tokens(messages: Union[Dict, List[Dict]], model: str = "gpt-3.5-turbo") -> int:
+def count_message_tokens(messages: Union[Dict, List[Dict]], model: str = "stepfun/step-3.5-flash:free") -> int:
     if isinstance(messages, dict):
         messages = [messages]
 
@@ -33,11 +35,9 @@ def count_message_tokens(messages: Union[Dict, List[Dict]], model: str = "gpt-3.
 
         encoding = AutoTokenizer.from_pretrained(LOCAL_LLMS_MAPPING[model.lower()])
     else:
-        raise NotImplementedError(
-            f"count_message_tokens() is not implemented for model {model}.\n"
-            " See https://github.com/openai/openai-python/blob/main/chatml.md for"
-            " information on how messages are converted to tokens."
-        )
+        tokens_per_message = 4
+        tokens_per_name = -1
+        encoding = tiktoken.get_encoding("cl100k_base")
     if model.startswith("gpt-3.5-turbo") or model.startswith("gpt-4"):
         try:
             encoding = tiktoken.encoding_for_model(encoding_model)

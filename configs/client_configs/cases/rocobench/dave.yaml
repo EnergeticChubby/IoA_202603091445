@@ -12,7 +12,7 @@ comm:
   max_team_up_attempts: 10
   llm:
     llm_type: openai-chat
-    model: gpt-4-1106-preview
+    model: stepfun/step-3.5-flash:free
     temperature: 0.
   observation_func: rocobench
   discussion_only: true

@@ -16,7 +16,7 @@ tool_agent:
   image_name: react-agent
   container_name: web_browser_react_agent
   port: 7070
-  model: gpt-4-1106-preview
+  model: stepfun/step-3.5-flash:free
   max_num_steps: 6
 
 comm:
@@ -28,5 +28,5 @@ comm:
   max_team_up_attempts: 5
   llm:
     llm_type: openai-chat
-    model: gpt-4-1106-preview
+    model: stepfun/step-3.5-flash:free
     temperature: 0.1

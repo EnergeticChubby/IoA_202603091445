@@ -59,7 +59,7 @@ os.makedirs(os.path.join(result_dir, "processed"), exist_ok=True)
 def handle_unable_to_determine(messages, extracted_text):
     messages = copy.deepcopy(messages)
     messages += [{"role": "assistant", "content": extracted_text}, {"role": "user", "content": GUESS_PROMPT}]
-    response = client.chat.completions.create(messages=messages, model="gpt-4o", temperature=0)
+    response = client.chat.completions.create(messages=messages, model="stepfun/step-3.5-flash:free", temperature=0)
     extracted_text = response.choices[0].message.content
     return extracted_text
 
@@ -86,7 +86,7 @@ for root, dirs, files in os.walk(result_dir):
             + [{"role": "user", "content": END_PROMPT.format(goal)}]
         )
 
-        response = client.chat.completions.create(messages=messages, model="gpt-4o", temperature=0)
+        response = client.chat.completions.create(messages=messages, model="stepfun/step-3.5-flash:free", temperature=0)
         extracted_text = response.choices[0].message.content
         print(extracted_text)
         if "Unable to determine".lower() in extracted_text.lower():

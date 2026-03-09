@@ -58,7 +58,7 @@ ${new_events}
         start_index: int = 0,
         max_summary_length: int = 0,
         max_send_token: int = 0,
-        model: str = "gpt-3.5-turbo",
+        model: str = "stepfun/step-3.5-flash:free",
     ) -> List[dict]:
         if self.has_summary:
             start_index = self.last_trimmed_index
@@ -100,7 +100,7 @@ ${new_events}
     async def update_running_summary(
         self,
         new_events: List[Dict],
-        model: str = "gpt-3.5-turbo",
+        model: str = "stepfun/step-3.5-flash:free",
         max_summary_length: Optional[int] = None,
     ) -> dict:
         if not new_events:

@@ -58,7 +58,7 @@ def sync_write_to_file(data: dict, filename: str):
 
 
 class OpenAIChatArgs(BaseModelArgs):
-    model: str = Field(default="gpt-3.5-turbo")
+    model: str = Field(default="stepfun/step-3.5-flash:free")
     max_tokens: Optional[int] = Field(default=None)
     temperature: float = Field(default=1.0)
     top_p: float = Field(default=1.0)
@@ -100,7 +100,7 @@ class OpenAIChat(BaseChatModel):
             "llama-2-7b-chat-hf": 4096,
         }
 
-        return send_token_limit_dict[model]
+        return send_token_limit_dict.get(model, 4096)
 
     @retry(
         stop=stop_after_attempt(20),
@@ -373,7 +373,7 @@ class OpenAIChat(BaseChatModel):
 
         model = self.args.model
         if model not in input_cost_map or model not in output_cost_map:
-            raise ValueError(f"Model type {model} not supported")
+            return 0.0
 
         return (
             self.total_prompt_tokens * input_cost_map[model] / 1000.0

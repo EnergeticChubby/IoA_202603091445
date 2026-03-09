@@ -58,7 +58,7 @@ tool_agent:
   image_name: latex_printer_react
   container_name: FormatCraft_Printer
   port: 7072
-  model: gpt-4-1106-preview
+  model: stepfun/step-3.5-flash:free
 
 comm:
   name: FormatCraft Printer
@@ -70,5 +70,5 @@ comm:
   llm:
     llm_type: openai-chat
     # model: gpt-3.5-turbo-1106 #gpt-4-1106
-    model: gpt-4-1106-preview
+    model: stepfun/step-3.5-flash:free
     temperature: 0.1

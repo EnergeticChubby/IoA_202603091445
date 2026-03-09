@@ -137,7 +137,7 @@ def handle_image(file_path: str, question: str) -> str:
                 ],
             },
         ],
-        model="gpt-4o",
+        model="stepfun/step-3.5-flash:free",
         max_tokens=4096,
         temperature=0.5,
     )

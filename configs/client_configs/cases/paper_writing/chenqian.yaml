@@ -22,5 +22,5 @@ comm:
   support_nested_teams: false
   llm:
     llm_type: openai-chat
-    model: gpt-4-1106-preview
+    model: stepfun/step-3.5-flash:free
     temperature: 0.1

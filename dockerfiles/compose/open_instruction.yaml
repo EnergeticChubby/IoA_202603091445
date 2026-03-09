@@ -38,8 +38,8 @@ services:
     environment:
       - HEADLESS_BROWSER=True
       - USE_WEB_BROWSER=firefox
-      - SMART_LLM=gpt-4-1106-preview
-      - FAST_LLM=gpt-4-1106-preview
+      - SMART_LLM=stepfun/step-3.5-flash:free
+      - FAST_LLM=stepfun/step-3.5-flash:free
       - EXECUTE_LOCAL_COMMANDS=True
       - DISABLED_COMMANDS=web_search
       - CUSTOM_CONFIG=configs/cases/open_instruction/autogpt.yaml

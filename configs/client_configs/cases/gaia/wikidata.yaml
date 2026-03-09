@@ -11,7 +11,7 @@ tool_agent:
   image_name: react-agent
   container_name: wikidata_react_agent
   port: 7073
-  model: gpt-4-1106-preview
+  model: stepfun/step-3.5-flash:free
   max_num_steps: 5
 
 comm:
@@ -23,5 +23,5 @@ comm:
   max_team_up_attempts: 10
   llm:
     llm_type: openai-chat
-    model: gpt-4-1106-preview
+    model: stepfun/step-3.5-flash:free
     temperature: 0.1
